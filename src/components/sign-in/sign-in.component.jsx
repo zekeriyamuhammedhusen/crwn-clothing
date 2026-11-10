@@ -49,7 +49,7 @@ class SignIn extends React.Component{
                     </CustemButton>
 
                     <CustemButton
-                        type="button"
+                        type="submit"
                         onClick={signInWithGoogle}
                         isGoogleSignIn
                     >
