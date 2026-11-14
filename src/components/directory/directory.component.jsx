@@ -1,64 +1,23 @@
 import React from "react";
+import { connect } from "react-redux";
 import MenuItem from "../menu-item/menu-item.component";
-import SHOP_DATA from "../../pages/shop/shop.data";
+import { selectDirectorySections } from "../../redux/directory/directory.selectors";
 import "./directory.styles.scss";
 
-class Directory extends React.Component {
-  constructor() {
-    super();
+const Directory = ({ sections }) => (
+  <div className="directory-menu">
+    {sections.map(({ id, linkUrl, ...sectionProps }) => (
+      <MenuItem
+        key={id}
+        linkUrl={linkUrl.replace(/^shop\//, "")}
+        {...sectionProps}
+      />
+    ))}
+  </div>
+);
 
-    this.state = {
-      sections: [
-        {
-          title: "hats",
-          imageUrl: "https://i.ibb.co/cvpntL1/hats.png",
-          id: 1,
-        },
-        {
-          title: "jackets",
-          imageUrl: "https://i.ibb.co/px2tCc3/jackets.png",
-          id: 2,
-        },
-        {
-          title: "sneakers",
-          imageUrl: "https://i.ibb.co/0jqHpnp/sneakers.png",
-          id: 3,
-        },
-        {
-          title: "womens",
-          imageUrl: "https://i.ibb.co/GCCdy8t/womens.png",
-          id: 4,
-        },
-        {
-          title: "mens",
-          imageUrl: "https://i.ibb.co/R70vBrQ/men.png",
-          id: 5,
-        },
-      ],
-    };
-  }
+const mapStateToProps = (state) => ({
+  sections: selectDirectorySections(state),
+});
 
-  render() {
-    return (
-      <div className="directory-menu">
-        {this.state.sections.map(({ id, title, ...otherSectionProps }) => {
-          const shopCategory = SHOP_DATA.find(
-            (category) =>
-              category.routeName.toLowerCase() === title.toLowerCase(),
-          );
-
-          return (
-            <MenuItem
-              key={id}
-              title={title}
-              linkUrl={shopCategory?.routeName}
-              {...otherSectionProps}
-            />
-          );
-        })}
-      </div>
-    );
-  }
-}
-
-export default Directory;
+export default connect(mapStateToProps)(Directory);
